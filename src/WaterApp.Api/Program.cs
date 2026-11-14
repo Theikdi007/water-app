@@ -12,7 +12,11 @@ builder.Services.AddDbContext<AppDbContext>(o =>
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment()) app.MapOpenApi();
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+    app.UseSwaggerUI(o => o.SwaggerEndpoint("/openapi/v1.json", "WaterApp v1"));
+}
 
 app.UseHttpsRedirection();
 app.MapControllers();

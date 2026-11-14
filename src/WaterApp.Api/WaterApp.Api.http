@@ -1,0 +1,6 @@
+@WaterApp.Api_HostAddress = http://localhost:5056
+
+GET {{WaterApp.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

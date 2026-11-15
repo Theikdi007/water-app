@@ -2,4 +2,7 @@
   <Folder Name="/src/">
     <Project Path="src/WaterApp.Api/WaterApp.Api.csproj" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/WaterApp.Tests/WaterApp.Tests.csproj" />
+  </Folder>
 </Solution>

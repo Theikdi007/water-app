@@ -15,13 +15,13 @@ public class CustomersController(AppDbContext db) : ControllerBase
     public async Task<List<Customer>> List() =>
         await db.Customers.OrderBy(x => x.Name).ToListAsync();
 
-    [HttpPost]
+    [HttpPost, Microsoft.AspNetCore.Authorization.Authorize(Roles = "Owner,Cashier")]
     public async Task<ActionResult<Customer>> Create(CreateCustomer r)
     {
         var id = r.Id ?? Guid.NewGuid();
 
         // Offline app က တူညီတဲ့ Id နဲ့ ထပ်ပို့ရင် အသစ်မဖန်တီးဘဲ ရှိပြီးသားကို ပြန်ပေး
-        var existing = await db.Customers.FindAsync(id);
+        var existing = await db.Customers.FirstOrDefaultAsync(e => e.Id == id);
         if (existing is not null) return Ok(existing);
 
         var c = new Customer

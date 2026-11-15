@@ -10,7 +10,7 @@ public class BalanceController(AppDbContext db) : ControllerBase
     [HttpGet("api/customers/{id:guid}/balance")]
     public async Task<IActionResult> Get(Guid id)
     {
-        var customer = await db.Customers.FindAsync(id);
+        var customer = await db.Customers.FirstOrDefaultAsync(e => e.Id == id);
         if (customer is null) return NotFound();
 
         var bottles = await db.BottleTxns

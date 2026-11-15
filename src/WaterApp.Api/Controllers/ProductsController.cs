@@ -15,11 +15,11 @@ public class ProductsController(AppDbContext db) : ControllerBase
     public async Task<List<Product>> List() =>
         await db.Products.OrderBy(x => x.Name).ToListAsync();
 
-    [HttpPost]
+    [HttpPost, Microsoft.AspNetCore.Authorization.Authorize(Roles = "Owner")]
     public async Task<ActionResult<Product>> Create(CreateProduct r)
     {
         var id = r.Id ?? Guid.NewGuid();
-        var existing = await db.Products.FindAsync(id);
+        var existing = await db.Products.FirstOrDefaultAsync(e => e.Id == id);
         if (existing is not null) return Ok(existing);
 
         var p = new Product

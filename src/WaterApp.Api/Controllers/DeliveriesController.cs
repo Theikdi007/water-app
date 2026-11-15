@@ -19,11 +19,11 @@ public class DeliveriesController(AppDbContext db) : ControllerBase
         var id = r.Id ?? Guid.NewGuid();
 
         // Offline sync ကြောင့် ထပ်ပို့လာရင် ထပ်မမှတ်ဘဲ ရှိပြီးသားကို ပြန်ပေး
-        var existing = await db.Deliveries.FindAsync(id);
+        var existing = await db.Deliveries.FirstOrDefaultAsync(e => e.Id == id);
         if (existing is not null) return Ok(existing);
 
-        var customer = await db.Customers.FindAsync(r.CustomerId);
-        var product = await db.Products.FindAsync(r.ProductId);
+        var customer = await db.Customers.FirstOrDefaultAsync(e => e.Id == r.CustomerId);
+        var product = await db.Products.FirstOrDefaultAsync(e => e.Id == r.ProductId);
         if (customer is null || product is null)
             return BadRequest("customer သို့မဟုတ် product ရှာမတွေ့ပါ");
 

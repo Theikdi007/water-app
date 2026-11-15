@@ -14,6 +14,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, ITenantContext
     public DbSet<Delivery> Deliveries => Set<Delivery>();
     public DbSet<Payment> Payments => Set<Payment>();
     public DbSet<Settlement> Settlements => Set<Settlement>();
+    public DbSet<AppUser> AppUsers => Set<AppUser>();
 
     // ကျပ်ပမာဏ အားလုံး decimal(18,0)
     protected override void ConfigureConventions(ModelConfigurationBuilder c) =>
@@ -33,6 +34,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options, ITenantContext
         b.Entity<Delivery>().HasIndex(x => new { x.TenantId, x.CustomerId });
         b.Entity<Payment>().HasIndex(x => new { x.TenantId, x.CustomerId });
         b.Entity<Settlement>().HasIndex(x => new { x.TenantId, x.DriverName, x.Date }).IsUnique();
+        b.Entity<AppUser>().HasIndex(x => x.Phone).IsUnique();
     }
 
     private void ConfigureTenantEntity<T>(ModelBuilder b) where T : class, ITenantEntity

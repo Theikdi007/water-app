@@ -48,11 +48,11 @@ public class SettlementsController(AppDbContext db) : ControllerBase
     public async Task<List<Settlement>> List([FromQuery] DateOnly date) =>
         await db.Settlements.Where(x => x.Date == date).OrderBy(x => x.DriverName).ToListAsync();
 
-    [HttpPost]
+    [HttpPost, Microsoft.AspNetCore.Authorization.Authorize(Roles = "Owner,Cashier")]
     public async Task<IActionResult> Close(CreateSettlement r)
     {
         var id = r.Id ?? Guid.NewGuid();
-        var existing = await db.Settlements.FindAsync(id);
+        var existing = await db.Settlements.FirstOrDefaultAsync(e => e.Id == id);
         if (existing is not null) return Ok(existing);
 
         if (await db.Settlements.AnyAsync(x => x.DriverName == r.DriverName && x.Date == r.Date))

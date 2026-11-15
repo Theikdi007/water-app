@@ -27,7 +27,7 @@ public class DeliveriesController(AppDbContext db) : ControllerBase
         if (customer is null || product is null)
             return BadRequest("customer သို့မဟုတ် product ရှာမတွေ့ပါ");
 
-        var price = r.UnitPrice ?? product.DefaultPrice;
+        var price = r.UnitPrice is > 0 ? r.UnitPrice.Value : product.DefaultPrice;
         var d = new Delivery
         {
             Id = id, CustomerId = r.CustomerId, ProductId = r.ProductId,

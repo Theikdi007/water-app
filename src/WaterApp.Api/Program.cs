@@ -17,6 +17,7 @@ builder.Services.AddDbContext<AppDbContext>(o => o.UseSqlServer(cfg.GetConnectio
 
 builder.Services.AddAuthentication("Bearer").AddJwtBearer(o =>
 {
+    o.MapInboundClaims = false;
     o.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = true, ValidIssuer = cfg["Jwt:Issuer"],

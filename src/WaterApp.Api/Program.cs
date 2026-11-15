@@ -23,7 +23,7 @@ builder.Services.AddAuthentication("Bearer").AddJwtBearer(o =>
         ValidateIssuer = true, ValidIssuer = cfg["Jwt:Issuer"],
         ValidateAudience = true, ValidAudience = cfg["Jwt:Audience"],
         ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(cfg["Jwt:Key"]!)),
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(cfg["Jwt:Key"] ?? throw new InvalidOperationException("Jwt:Key မသတ်မှတ်ရသေးပါ"))),
         RoleClaimType = "role", NameClaimType = "name"
     };
 });

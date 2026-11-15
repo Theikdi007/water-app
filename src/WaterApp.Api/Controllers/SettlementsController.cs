@@ -41,10 +41,14 @@ public class SettlementsController(AppDbContext db) : ControllerBase
 
     // ညနေစာရင်းမပိတ်ခင် မျှော်မှန်းငွေ/ဗူးခွံ ကြည့်ဖို့
     [HttpGet("summary")]
-    public async Task<DailySummary> Summary([FromQuery] string driver, [FromQuery] DateOnly date) =>
-        await Compute(driver, date);
+    public async Task<DailySummary> Summary([FromQuery] string? driver, [FromQuery] DateOnly date)
+    {
+        // Driver က ကိုယ့်စာရင်းပဲ ကြည့်ခွင့်ရှိ (token ထဲက နာမည်)
+        if (User.IsInRole("Driver")) driver = User.FindFirst("name")?.Value;
+        return await Compute(driver ?? "", date);
+    }
 
-    [HttpGet]
+    [HttpGet, Microsoft.AspNetCore.Authorization.Authorize(Roles = "Owner,Cashier")]
     public async Task<List<Settlement>> List([FromQuery] DateOnly date) =>
         await db.Settlements.Where(x => x.Date == date).OrderBy(x => x.DriverName).ToListAsync();
 

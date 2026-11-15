@@ -11,4 +11,6 @@ public class AppUser : ITenantEntity
     public string PinHash { get; set; } = "";
     public UserRole Role { get; set; }
     public bool IsActive { get; set; } = true;
+    public int FailedLogins { get; set; }
+    public DateTime? LockoutUntil { get; set; }
 }
